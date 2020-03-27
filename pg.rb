@@ -19,4 +19,4 @@ my_projects = Project.where(user_id: 1)
 puts my_projects.count
 puts my_projects.count
 
-puts my_projects.where(shared: true).count
+puts my_projects.where(shared: false).order(:updated_at)

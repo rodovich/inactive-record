@@ -4,11 +4,17 @@ module InactiveRecord
       @klass = klass
       @params = params
       @params[:where] ||= []
+      @params[:order] ||= []
     end
 
     # return a new relation, including the new `where` conditions
     def where(conditions)
       Relation.new(@klass, @params.merge(where: @params[:where] + conditions.to_a))
+    end
+
+    # return a new relation, including the new `order` criteria
+    def order(*criteria)
+      Relation.new(@klass, @params.merge(order: @params[:order] + criteria))
     end
 
     def to_a
@@ -34,6 +40,9 @@ module InactiveRecord
       clauses << "from #{table_name}"
       if @params[:where].any?
         clauses << "where #{@params[:where].map { |name, value| "#{name} = #{value}" }.join(' and ')}"
+      end
+      if @params[:order].any?
+        clauses << "order by #{@params[:order].join(', ')}"
       end
       InactiveRecord.execute_sql("#{clauses.join(' ')};")
     end
