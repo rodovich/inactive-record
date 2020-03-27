@@ -5,13 +5,13 @@ module InactiveRecord
     end
 
     def to_a
-      InactiveRecord.execute_sql("select * from #{table_name};").map do |attributes|
+      execute_select('*').map do |attributes|
         @klass.new(attributes)
       end
     end
 
     def count
-      InactiveRecord.execute_sql("select count(*) from #{table_name};")
+      execute_select('count(*)')
         .first['count'].to_i
     end
 
@@ -20,6 +20,12 @@ module InactiveRecord
     end
 
     private
+
+    def execute_select(selection)
+      select_clause = "select #{selection}"
+      from_clause = "from #{table_name}"
+      InactiveRecord.execute_sql("#{select_clause} #{from_clause};")
+    end
 
     def table_name
       @klass.name.underscore.pluralize
