@@ -37,6 +37,10 @@ module InactiveRecord
         .first['count'].to_i
     end
 
+    def map(&block)
+      to_a.map(&block)
+    end
+
     def inspect
       "[#{to_a.map(&:inspect).join(', ')}]"
     end
