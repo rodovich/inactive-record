@@ -4,14 +4,14 @@ rescue => LoadError
   puts 'Could not load the pg gem. Run `gem install pg` and try again.'
 end
 
-connection = PG.connect({
-  host: 'localhost',
-  port: '5433',
-  user: 'development',
-  password: 'development',
-  dbname: 'easel_development',
-})
+require './support/string'
+require './inactive_record/base'
+require './inactive_record/connection'
+require './inactive_record/relation'
 
-result = connection.exec('SELECT id, name FROM projects').to_a
+class Project < InactiveRecord::Base
+end
 
-puts result
+puts Project.count
+
+puts Project.all
