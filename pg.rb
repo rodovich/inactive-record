@@ -10,4 +10,9 @@ require './inactive_record/connection'
 require './inactive_record/relation'
 
 class Project < InactiveRecord::Base
+  belongs_to :user
+end
+
+class User < InactiveRecord::Base
+  has_many :projects
 end
