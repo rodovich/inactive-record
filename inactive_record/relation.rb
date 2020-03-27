@@ -1,7 +1,14 @@
 module InactiveRecord
   class Relation
-    def initialize(klass)
+    def initialize(klass, params = {})
       @klass = klass
+      @params = params
+      @params[:where] ||= []
+    end
+
+    # return a new relation, including the new `where` conditions
+    def where(conditions)
+      Relation.new(@klass, @params.merge(where: @params[:where] + conditions.to_a))
     end
 
     def to_a
@@ -22,9 +29,13 @@ module InactiveRecord
     private
 
     def execute_select(selection)
-      select_clause = "select #{selection}"
-      from_clause = "from #{table_name}"
-      InactiveRecord.execute_sql("#{select_clause} #{from_clause};")
+      clauses = []
+      clauses << "select #{selection}"
+      clauses << "from #{table_name}"
+      if @params[:where].any?
+        clauses << "where #{@params[:where].map { |name, value| "#{name} = #{value}" }.join(' and ')}"
+      end
+      InactiveRecord.execute_sql("#{clauses.join(' ')};")
     end
 
     def table_name

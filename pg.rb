@@ -14,4 +14,5 @@ end
 
 puts Project.count
 
-puts Project.all
+puts Project.where(user_id: 1, shared: true).count
+puts Project.where(user_id: 1).where(shared: true).count
