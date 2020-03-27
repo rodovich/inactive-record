@@ -14,5 +14,9 @@ end
 
 puts Project.count
 
-puts Project.where(user_id: 1, shared: true).count
-puts Project.where(user_id: 1).where(shared: true).count
+my_projects = Project.where(user_id: 1)
+
+puts my_projects.count
+puts my_projects.count
+
+puts my_projects.where(shared: true).count

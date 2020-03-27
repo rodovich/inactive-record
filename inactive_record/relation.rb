@@ -12,13 +12,13 @@ module InactiveRecord
     end
 
     def to_a
-      execute_select('*').map do |attributes|
+      @to_a ||= execute_select('*').map do |attributes|
         @klass.new(attributes)
       end
     end
 
     def count
-      execute_select('count(*)')
+      @count ||= execute_select('count(*)')
         .first['count'].to_i
     end
 
