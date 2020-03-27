@@ -5,6 +5,7 @@ module InactiveRecord
       @params = params
       @params[:where] ||= []
       @params[:order] ||= []
+      @params[:limit] ||= nil
     end
 
     # return a new relation, including the new `where` conditions
@@ -17,10 +18,18 @@ module InactiveRecord
       Relation.new(@klass, @params.merge(order: @params[:order] + criteria))
     end
 
+    # return a new relation, including the new `limit` number
+    def limit(number)
+      Relation.new(@klass, @params.merge(limit: number))
+    end
+
+    def first
+      @first ||= limit(1).to_a.first
+    end
+
     def to_a
-      @to_a ||= execute_select('*').map do |attributes|
-        @klass.new(attributes)
-      end
+      @to_a ||= execute_select('*')
+        .map { |attributes| @klass.new(attributes) }
     end
 
     def count
@@ -43,6 +52,9 @@ module InactiveRecord
       end
       if @params[:order].any?
         clauses << "order by #{@params[:order].join(', ')}"
+      end
+      if @params[:limit]
+        clauses << "limit #{@params[:limit]}"
       end
       InactiveRecord.execute_sql("#{clauses.join(' ')};")
     end

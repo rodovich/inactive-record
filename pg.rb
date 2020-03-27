@@ -11,12 +11,3 @@ require './inactive_record/relation'
 
 class Project < InactiveRecord::Base
 end
-
-puts Project.count
-
-my_projects = Project.where(user_id: 1)
-
-puts my_projects.count
-puts my_projects.count
-
-puts my_projects.where(shared: false).order(:updated_at)
