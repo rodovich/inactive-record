@@ -48,7 +48,7 @@ module InactiveRecord
       clauses << "select #{selection}"
       clauses << "from #{table_name}"
       if @params[:where].any?
-        clauses << "where #{@params[:where].map { |name, value| "#{name} = #{value}" }.join(' and ')}"
+        clauses << "where #{@params[:where].map { |name, value| "#{name} = '#{value}'" }.join(' and ')}"
       end
       if @params[:order].any?
         clauses << "order by #{@params[:order].join(', ')}"
