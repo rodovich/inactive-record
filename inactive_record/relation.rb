@@ -37,8 +37,8 @@ module InactiveRecord
         .first['count'].to_i
     end
 
-    def to_s
-      "[#{to_a.join(', ')}]"
+    def inspect
+      "[#{to_a.map(&:inspect).join(', ')}]"
     end
 
     private

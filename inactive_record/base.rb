@@ -43,7 +43,7 @@ module InactiveRecord
       @attributes[method.to_s]
     end
 
-    def to_s
+    def inspect
       "<#{self.class.name} #{@attributes.map { |name, value| "#{name}=#{value.inspect}"}.join(' ')}>"
     end
   end
