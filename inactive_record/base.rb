@@ -5,8 +5,8 @@ module InactiveRecord
         Relation.new(self)
       end
 
-      def count
-        all.count
+      def method_missing(method, *params)
+        all.send(method, *params)
       end
     end
 
